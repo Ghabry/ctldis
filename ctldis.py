@@ -2,13 +2,14 @@
 # First Release: 2009-12-07 (by Rob)
 # Last Update: 2012-05-05
 
+from itertools import chain
 from array import array
 
-base_name = "b101"
+base_name = "B102"
 
-original_file_name   = base_name+"_orig.ctl"
+original_file_name   = base_name+"_orig.CTL"
 disassembled_file_name = base_name+".txt"
-assembled_file_name  = base_name+".ctl"
+assembled_file_name  = base_name+".CTL"
 
 MODE = 1 # 0 == assemble, 1 == disassemble
 
@@ -246,7 +247,7 @@ class CTLFileReader(object):
         self.__ConstructEndList()
                 
     def __LoadFile(self, path):
-        F = file(path, "rb")
+        F = open(path, "rb")
         self.data = array("i")
         self.data.fromstring(F.read())
         F.close()
@@ -296,14 +297,20 @@ class DisassembledFunction(object):
             tokens = line.replace(",","").split()
             op = tokens[0]
             args = tokens[1:]
-            
 
-            if (op in ["else", "endif", "while", "whilenot", "always", "next", "test_more_events",".func"]): indent -= 1
-            print >> stream, "    "*indent + op + " " + ", ".join(args)
-            if (op in [".func", "iftrue", "iffalse", "else", "on_event", "do", "for", "get_event"]): indent+=1
-            if (op in ["end_event"]): indent -= 1
+            if (op in ["else", "endif", "while", "whilenot", "always", "next", "test_more_events",".func"]):
+                indent -= 1
 
-        print >> stream, "\n\n\n"
+            stream.write("    "*indent + op + " " + ", ".join(args))
+            stream.write("\n")
+
+            if (op in [".func", "iftrue", "iffalse", "else", "on_event", "do", "for", "get_event"]):
+                indent+=1
+
+            if (op in ["end_event"]):
+                indent -= 1
+
+        stream.write("\n\n")
 
     def Assemble(self):
         trimmed = [i for i in self.lines if i!='']
@@ -318,7 +325,7 @@ class DisassembledFunction(object):
         while len(trimmed) > 0:
             line = trimmed.pop(0)
             spLine = line.replace(",","").split()
-            opcode = None
+
             if (spLine[0][0] == "@"):
                 opcode = spLine[0].replace("@","")
                 opcode = int(opcode,16)
@@ -364,7 +371,7 @@ class AssembledFunction(object):
                 opName = opNames.get(shortOp, "#%.2x"%shortOp)
                 
                 newLine = []
-                for i in xrange(argCount):
+                for i in range(argCount):
                     newLine.append( str(opList.pop(0)) )
                 formLine = "%s %s" % (opName, ", ".join(newLine))
                 decompiledFunc.lines.append(formLine)
@@ -373,7 +380,7 @@ class AssembledFunction(object):
             
 class DisctlFileReader(object):
     def __init__(self, path):
-        F = file(path, "rt")
+        F = open(path, "rt")
         lines = F.readlines()
         F.close()
         
@@ -392,7 +399,7 @@ class DisctlFileReader(object):
 
 class CTLFileWriter(object):
     def __init__(self, path):
-        self.F = file(path, "wb")
+        self.F = open(path, "wb")
         self.funcs = {}
 
     def AddFunc(self, func):
@@ -426,17 +433,17 @@ class CTLFileWriter(object):
 
 
 if MODE == 1:
-    print "DISASSEMBLING"
-    F = file(disassembled_file_name,"wt")
+    print("DISASSEMBLING")
+    F = open(disassembled_file_name,"wt")
     C = CTLFileReader(original_file_name)
-    for i in range(0, len(C.extOff)) + range(100, len(C.stdOff)+100) :
+    for i in chain(range(0, len(C.extOff)), range(100, len(C.stdOff)+100)):
         compFunc = C.GetFunction(i)
         decompFunc = compFunc.Disassemble()
         decompFunc.Print(stream=F)
     F.close()
 
 else:
-    print "ASSEMBLING"
+    print("ASSEMBLING")
     D = DisctlFileReader(disassembled_file_name)
     W = CTLFileWriter(assembled_file_name)
     for func in D.funcs:
