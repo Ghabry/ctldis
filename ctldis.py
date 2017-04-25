@@ -1,17 +1,36 @@
 # CTL Assembler/Disassembler
 # First Release: 2009-12-07 (by Rob)
-# Last Update: 2012-05-05
+# Last Update: 2017-04-25
 
 from itertools import chain
 from array import array
+import sys
+from os import path
+from shutil import copyfile
 
-base_name = "B102"
+if len(sys.argv) > 1:
+    base_name = sys.argv[1].upper()
+else:
+    base_name = "B102"
+
+if len(sys.argv) > 2:
+    arg = sys.argv[2]
+
+    try:
+        MODE = int(arg)
+    except ValueError:
+        if arg.lower().startswith("a"):
+            MODE = 0
+        elif arg.lower().startswith("d"):
+            MODE = 1
+        else:
+            raise ValueError("Bad mode: Must be a or d")
+else:
+    MODE = 1 # 0 == assemble, 1 == disassemble
 
 original_file_name   = base_name+"_orig.CTL"
 disassembled_file_name = base_name+".txt"
 assembled_file_name  = base_name+".CTL"
-
-MODE = 1 # 0 == assemble, 1 == disassemble
 
 
 opLengths = {   0x00:1, 0x01:0, 0x02:0, 0x03:0, 0x04:0, 0x05:0, 
@@ -433,8 +452,19 @@ class CTLFileWriter(object):
 
 
 if MODE == 1:
+    if path.exists(disassembled_file_name):
+        ans = input("A decompiled script already exists. Overwrite? [y/n] ")
+
+        if ans != "y":
+            exit(1)
+
     print("DISASSEMBLING")
+
     F = open(disassembled_file_name,"wt")
+
+    if not path.exists(original_file_name):
+        copyfile(assembled_file_name, original_file_name)
+
     C = CTLFileReader(original_file_name)
     for i in chain(range(0, len(C.extOff)), range(100, len(C.stdOff)+100)):
         compFunc = C.GetFunction(i)
