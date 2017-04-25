@@ -7,6 +7,7 @@ from array import array
 import sys
 from os import path
 from shutil import copyfile
+from collections import defaultdict
 
 if len(sys.argv) > 1:
     base_name = sys.argv[1].upper()
@@ -161,7 +162,7 @@ opNames = {
     0x54:"teleport_to",
     0x55:"teleport_to2",
     
-	0x5a:"charge",
+    0x5a:"charge",
     0x5c:"retreat",
     0x65:"hold",
 
@@ -233,7 +234,7 @@ opNames = {
 
     0xd5:"test_units_alive_le_i",
     0xd7:"test_boss_defeated",
-	0xd8:"test_unit_alive",
+    0xd8:"test_unit_alive",
     0xd9:"test_user_action",       
     0xda:"ui_indicate",
     0xdd:"set_unit_r_direction",
@@ -254,6 +255,135 @@ opNames = {
     0xed:"end_mission",
     0xee:"test_event_from_unit",
 }
+
+class Prettifier:
+    unit_flag_1 = {
+        0x2000: "Retreat"
+    }
+
+    unit_flag_2 = {
+        0x2: "Casting",
+        0x4: "Shooting"
+    }
+    unit_flag_3 = {
+        0x1000: "MovingToTarget",
+        0x2000: "CollectingItem"
+    }
+
+    attributes = {
+        0x1: "WillNeverRoute",
+        0x2: "Unknown1",
+        0x4: "CauseFear",
+        0x8: "CauseTerror",
+        0x10: "ElfRacialFlag",
+        0x20: "GoblinRacialFlag",
+        0x40: "HateGreenskins",
+        0x80: "DifficultTerrainFast",
+        0x100: "ImmuneToFear",
+        0x200: "RegeneratesWounds",
+        0x400: "NeverRegroup",
+        0x800: "AlwaysPursue",
+        0x1000: "EngineOfWar",
+        0x2000: "Indestructible",
+        0x4000: "Unknown2",
+        0x8000: "SufferExtra",
+        0x10000: "InflictCasualtyFear",
+        0x20000: "Coward",
+        0x40000: "DestroyIfRoute",
+        0x80000: "Flammable",
+        0x100000: "360",
+        0x200000: "ContainFanatics",
+        0x400000: "WraithsFlag",
+        0x800000: "Giant",
+        0x1000000: "GoblinFlagTradingPost",
+        0x2000000: "ImmuneToMagic",
+        0x4000000: "NeverRetreats",
+        0x8000000: "NoItemSlots",
+        0x10000000: "FanaticsFlag",
+        0x20000000: "FearElves",
+        0x40000000: "Unknown3",
+        0x80000000: "Unknown4"
+    }
+
+    @staticmethod
+    def get_bits_set(x):
+        bits = []
+
+        for y in range(32):
+            z = x & (0 | 1 << y)
+            if z:
+                bits.append(z)
+
+        return bits
+
+    @staticmethod
+    def flag_prettifier(flag, lookup_dict):
+        return [" | ".join(
+            map(lambda x: lookup_dict.get(x, hex(x)), Prettifier.get_bits_set(int(flag)))
+        )]
+
+    prettifier = {
+        "test_unit_flag1": [
+            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.unit_flag_1),
+            lambda flag: int(flag, 16)
+        ],
+        "set_unit_flag1": [
+            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.unit_flag_1),
+            lambda flag: int(flag, 16)
+        ],
+        "clear_unit_flag1": [
+            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.unit_flag_1),
+            lambda flag: int(flag, 16)
+        ],
+        "wait_unit_flag1_clear": [
+            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.unit_flag_1),
+            lambda flag: int(flag, 16)
+        ],
+        "test_unit_flag2": [
+            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.unit_flag_2),
+            lambda flag: int(flag, 16)
+        ],
+        "set_unit_flag2": [
+            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.unit_flag_2),
+            lambda flag: int(flag, 16)
+        ],
+        "clear_unit_flag2": [
+            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.unit_flag_2),
+            lambda flag: int(flag, 16)
+        ],
+        "wait_unit_flag2_clear": [
+            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.unit_flag_2),
+            lambda flag: int(flag, 16)
+        ],
+        "test_unit_flag3": [
+            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.unit_flag_3),
+            lambda flag: int(flag, 16)
+        ],
+        "set_unit_flag3": [
+            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.unit_flag_3),
+            lambda flag: int(flag, 16)
+        ],
+        "clear_unit_flag3": [
+            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.unit_flag_3),
+            lambda flag: int(flag, 16)
+        ],
+        "wait_unit_flag3_clear": [
+            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.unit_flag_3),
+            lambda flag: int(flag, 16)
+        ],
+        "set_attribute": [
+            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.attributes),
+            lambda x: x
+        ],
+        "test_attribute_set": [
+            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.attributes),
+            lambda x: x
+        ],
+        "clear_attribute": [
+            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.attributes),
+            lambda x: x
+        ]
+    }
 
 revOpNames = {}
 for opCode in opNames:
@@ -312,8 +442,7 @@ class DisassembledFunction(object):
     def Print(self, stream=None):
         indent = 1
         
-        for line in self.lines:
-            tokens = line.replace(",","").split()
+        for tokens in self.lines:
             op = tokens[0]
             args = tokens[1:]
 
@@ -369,18 +498,19 @@ class AssembledFunction(object):
     def Disassemble(self):
         opList = self.data[:]
         decompiledFunc = DisassembledFunction()
-        decompiledFunc.lines.append(".func %s" % self.name)
+        decompiledFunc.lines.append([".func", self.name])
         
-        while (len(opList)>0):
+        while len(opList) > 0:
             opcode = opList.pop(0)
             sopcode = opcode
-            if (sopcode & 0x8000): sopcode = (~sopcode + 1)
+            if (sopcode & 0x8000):
+                sopcode = (~sopcode + 1)
                 
-            if (sopcode >= 0):
+            if sopcode >= 0:
                 if opcode == 0xabc:
-                    decompiledFunc.lines.append("@0xABC")
+                    decompiledFunc.lines.append(["@0xABC"])
                 elif opcode == 0x0:
-                    decompiledFunc.lines.append("@0x0")
+                    decompiledFunc.lines.append(["@0x0"])
                 else:
                     decompiledFunc.Print()
                     raise Exception("WARNING: unknown token %x" % opcode)
@@ -390,10 +520,15 @@ class AssembledFunction(object):
                 opName = opNames.get(shortOp, "#%.2x"%shortOp)
                 
                 newLine = []
+
                 for i in range(argCount):
-                    newLine.append( str(opList.pop(0)) )
-                formLine = "%s %s" % (opName, ", ".join(newLine))
-                decompiledFunc.lines.append(formLine)
+                    newLine.append(str(opList.pop(0)))
+
+                if opName in Prettifier.prettifier:
+                    newLine = Prettifier.prettifier[opName][0](*newLine)
+
+                #formLine = "%s %s" % (opName, ", ".join(newLine))
+                decompiledFunc.lines.append([opName, *newLine])
 
         return decompiledFunc
             
