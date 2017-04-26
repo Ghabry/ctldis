@@ -154,7 +154,7 @@ opNames = {
     0x41:"test_label_exists",
     0x42:"send_event_to_self_if_label_exists",
 
-	0x44:"test_self_and_target_can_fight",
+	#0x44:"test_self_and_target_can_fight",
 
     0x4c:"nop_4c",
 
@@ -252,8 +252,8 @@ opNames = {
     0xcf:"clear_attribute",
 
     0xd0:"find_and_collect_item",
-    0xd1:"event_test_distance_to_item",
-    0xd2:"event_test_collects_this_item",
+    0xd1:"event_test_distance_and_collect_this_item",
+    0xd2:"event_test_unit_collects_this_item",
     0xd3:"event_test_item",
     0xd4:"event_test_any_friend_collects_this_item",
 
