@@ -716,7 +716,9 @@ class DisassembledFunction(object):
             if (op in ["else", "endif", "while", "whilenot", "always", "next", "test_more_events",".func"]):
                 indent -= 1
 
-            stream.write("    "*indent + op + " " + ", ".join(args))
+            stream.write("    "*indent + op)
+            if len(args) > 0:
+                stream.write(" " + ", ".join(args))
             stream.write("\n")
 
             if (op in [".func", "iftrue", "iffalse", "else", "on_event", "do", "for", "get_event"]):
@@ -797,7 +799,6 @@ class AssembledFunction(object):
                         else:
                             newLine.append(str(opList.pop(0)))
 
-                #formLine = "%s %s" % (opName, ", ".join(newLine))
                 decompiledFunc.lines.append([opName] + newLine)
 
         return decompiledFunc
