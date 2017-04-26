@@ -276,16 +276,15 @@ Arg_Missile = 14
 Arg_UnitType = 15
 Arg_Item = 16
 Arg_MagicFlag = 17
-Arg_MagicBook = 18
-Arg_Attribute = 19
-Arg_Voice = 20
-Arg_Unit = 21
-Arg_Alignment = 22
-Arg_Spawn = 23
-Arg_GameStatus = 24
-Arg_Objective = 25
-Arg_Boss = 26
-Arg_UnitId = 27
+Arg_Attribute = 18
+Arg_Voice = 19
+Arg_Unit = 20
+Arg_Alignment = 21
+Arg_Spawn = 22
+Arg_GameStatus = 23
+Arg_Objective = 24
+Arg_Boss = 25
+Arg_UnitId = 26
 
 opTypes = {
     0x00: [Arg_Unused],
@@ -372,7 +371,7 @@ opTypes = {
     0x9a: [Arg_Unused],
     0x9b: [Arg_Unused]*2,
     0x9d: [Arg_Item],
-    0x9e: [Arg_MagicBook, Arg_Any],
+    0x9e: [Arg_Item, Arg_Any],
     0xa0: [Arg_Unused]*3,
     0xa1: [Arg_Any],
     0xa2: [Arg_Event, Arg_UF1, Arg_Attribute],
@@ -483,6 +482,71 @@ class Prettifier:
         0x80000000: "Unknown4"
     }
 
+    items = {
+        1: "Grudgebringer_Sword",
+        2: "Skabskrath",
+        3: "Runefang",
+        4: "Hellfire_Sword",
+        5: "Storm_Sword",
+        6: "Lighning_Bolt",
+        7: "Spelleater_Shield",
+        8: "Dragon_Helm",
+        9: "Shield_of_Ptolos",
+        10: "Enchanted_Shield",
+        11: "Heart_of_Woe",
+        12: "Potion_of_Strength",
+        13: "Horn_of_Urgok",
+        14: "Ring_of_Volans",
+        15: "Banner_of_Arcane_Warding",
+        16: "Banner_of_Wrath",
+        17: "Banner_of_Defiance",
+        18: "Morks_War_Banner",
+        19: "Staff_of_Osiris",
+        20: "Wand_of_Jet",
+        21: "Book_of_Ashur",
+        22: "Bright_Book",
+        23: "Ice_Book",
+        24: "Waaagh_Book",
+        25: "Dark_Book",
+        26: "Fireball",
+        27: "Sanguine_Swords",
+        28: "Blast",
+        29: "Burning_Head",
+        30: "Conflagration_of_Doom",
+        31: "Flamestorm",
+        32: "Crimson_Bands",
+        33: "Wings_of_Fire",
+        34: "Death_Frost",
+        35: "Chill_Blast",
+        36: "Ice_Shards",
+        37: "Wind_of_Cold",
+        38: "Shield_of_Cold",
+        39: "Hawks_of_Miska",
+        40: "Snow_Blizzard",
+        41: "Crystal_Cloak",
+        42: "Brain_Bursta",
+        43: "Gaze_of_Mork",
+        44: "Da_Krunch",
+        45: "Fists_of_Gork",
+        46: "Mork_Save_Uz",
+        47: "Ere_We_Go",
+        48: "Gaze_Of_Nagash",
+        49: "Raise_the_Dead",
+        50: "Doombolt",
+        51: "Death_Spasm",
+        52: "Blade_Wind",
+        53: "Arnizipal_Black_Horror",
+        54: "Soul_Drain",
+        55: "Witch_Flight",
+        56: "Dispel_Magic",
+        57: "Treasure_Chest_50gc",
+        58: "Treasure_Chest_100gc",
+        59: "Treasure_Chest_150gc",
+        60: "Treasure_Chest_200gc",
+        61: "Treasure_Chest_250gc",
+        62: "Treasure_Chest_300gc",
+    }
+
     @staticmethod
     def get_bits_set(x):
         bits = []
@@ -501,6 +565,19 @@ class Prettifier:
         )
         return s if len(s) > 0 else "0"
 
+    @staticmethod
+    def substitute(val, lookup_dict, prefix):
+        v = Prettifier.items.get(int(val))
+
+        if v:
+            return v
+
+        return prefix + "_" + val
+
+    @staticmethod
+    def wrap(name, val):
+        return name + "(" + val + ")"
+
     prettifier = {
         Arg_UF1: [
             lambda flag: Prettifier.flag_prettifier(flag, Prettifier.unit_flag_1),
@@ -514,12 +591,32 @@ class Prettifier:
             lambda flag: Prettifier.flag_prettifier(flag, Prettifier.unit_flag_3),
             lambda flag: int(flag, 16)
         ],
+        Arg_CtrlFlag: [
+            lambda flag: Prettifier.flag_prettifier(flag, {}),
+            lambda flag: int(flag, 16)
+        ],
+        Arg_Label: [
+            lambda arg: hex(int(arg)),
+            lambda arg: arg
+        ],
         Arg_Attribute: [
             lambda flag: Prettifier.flag_prettifier(flag, Prettifier.attributes),
             lambda x: x
         ],
+        Arg_Item: [
+            lambda arg: Prettifier.substitute(arg, Prettifier.items, "Magic"),
+            lambda arg: ""
+        ],
+        Arg_Event: [
+            lambda arg: Prettifier.wrap("E", arg),
+            lambda arg: ""
+        ],
+        Arg_Function: [
+            lambda arg: Prettifier.wrap("F", arg),
+            lambda arg: ""
+        ],
         Arg_Unused: [
-            lambda arg: "Unused_" + arg,
+            lambda arg: Prettifier.wrap("X", arg),
             lambda arg: ""
         ]
     }
@@ -662,7 +759,7 @@ class AssembledFunction(object):
 
                 if argCount > 0:
                     argTypes = opTypes[shortOp]
-                    print(str(shortOp) + " " + str(argCount))
+
                     for i in range(argCount):
                         if argTypes[i] in Prettifier.prettifier:
                             newLine.append(Prettifier.prettifier[argTypes[i]][0](str(opList.pop(0))))
