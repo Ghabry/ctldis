@@ -13,7 +13,7 @@ import sys
 if len(sys.argv) > 1:
     base_name = sys.argv[1].upper()
 else:
-    base_name = "B102"
+    base_name = "B101"
 
 if len(sys.argv) > 2:
     arg = sys.argv[2]
@@ -213,7 +213,7 @@ opNames = {
 
     0xa2:"find_enemy_uflag_attrib",
     0xa3:"find_enemy_visible",
-    0xa4:"find_enemy_simple";
+    0xa4:"find_enemy_simple",
     0xa5:"find_enemy_simple_visible",
     0xa6:"find_enemy_unittype",
     0xa7:"find_enemy_unittype_2",
@@ -255,7 +255,7 @@ opNames = {
     0xd1:"event_test_distance_to_item",
     0xd2:"event_test_collects_this_item",
     0xd3:"event_test_item",
-    0xd4:"event_test_any_friend_collects_this_item"
+    0xd4:"event_test_any_friend_collects_this_item",
 
     0xd5:"test_units_alive_le_i",
     0xd7:"test_boss_defeated",
@@ -618,6 +618,10 @@ class Prettifier:
             lambda flag: Prettifier.flag_prettifier(flag, {}),
             lambda flag: int(flag, 16)
         ],
+        Arg_MagicFlag: [
+            lambda flag: Prettifier.flag_prettifier(flag, {}),
+            lambda flag: int(flag, 16)
+        ],
         Arg_Label: [
             lambda arg: hex(int(arg)),
             lambda arg: arg
@@ -637,6 +641,10 @@ class Prettifier:
         Arg_Function: [
             lambda arg: Prettifier.wrap("F", arg),
             lambda arg: ""
+        ],
+        Arg_EndEvent: [
+            lambda arg: "Propagate" if arg == "3567" else "Filter",
+            lambda arg: arg
         ],
         Arg_Unused: [
             lambda arg: Prettifier.wrap("X", arg),
@@ -767,7 +775,7 @@ class AssembledFunction(object):
 
             if sopcode >= 0:
                 if opcode == 0xabc:
-                    decompiledFunc.lines.append(["@0xABC"])
+                    decompiledFunc.lines.append(["@Filter"])
                 elif opcode == 0x0:
                     decompiledFunc.lines.append(["@0x0"])
                 else:
