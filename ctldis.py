@@ -125,7 +125,7 @@ opNames = {
     0x29:"retreat_to_node",
 
     0x2a:"add_waypoint",
-    0x2b:"!!!block_movement",
+    #0x2b:"block_movement",
     0x2c:"wait_unit_flag1_clear",
     0x2d:"wait_unit_flag1_set",
     0x2e:"test_unit_flag1",
@@ -154,6 +154,8 @@ opNames = {
     0x41:"test_label_exists",
     0x42:"send_event_to_self_if_label_exists",
 
+	0x44:"test_self_and_target_can_fight",
+
     0x4c:"nop_4c",
 
     0x4e:"goto_iftrue",
@@ -164,8 +166,12 @@ opNames = {
     0x54:"teleport_to",
     0x55:"teleport_to2",
 
+    0x58:"test_target_in_charge_range",
+    0x59:"charge_and_send_event_to_target",
     0x5a:"charge",
+    0x5b:"retreat_from_target",
     0x5c:"retreat",
+    0x5d:"retreat_inverted",
     0x65:"hold",
 
     0x69:"send_event_to_self",
@@ -187,6 +193,8 @@ opNames = {
 
     0x82:"test_unit_flag1_and_close_combat",
 
+    0x86:"test_unit_can_fight",
+
     0x8d:"test_missile_weapon",
 
     0x90:"nop_90",
@@ -201,8 +209,19 @@ opNames = {
     0x99:"cast_spell_on_self",
     0x9d:"add_spell",
 
-    0xa2:"search_and_attack_enemy",
-    0xac:"search_and_shoot_enemy",
+    0x9f:"test_unit_can_fight_2",
+
+    0xa2:"find_enemy_uflag_attrib",
+    0xa3:"find_enemy_visible",
+    0xa4:"find_enemy_simple";
+    0xa5:"find_enemy_simple_visible",
+    0xa6:"find_enemy_unittype",
+    0xa7:"find_enemy_unittype_2",
+    0xa8:"find_enemy_nth",
+    0xa9:"find_enemy_nth_visble",
+    0xaa:"find_enemy_unittype_nth",
+    0xab:"find_enemy_unittype_nth_2",
+    0xac:"find_enemy_distance_uflag",
 
     0xae:"play_self",
     0xaf:"play_other",
@@ -232,7 +251,11 @@ opNames = {
     0xce:"set_attribute",
     0xcf:"clear_attribute",
 
-    0xd3:"test_event_arg3",
+    0xd0:"find_and_collect_item",
+    0xd1:"event_test_distance_to_item",
+    0xd2:"event_test_collects_this_item",
+    0xd3:"event_test_item",
+    0xd4:"event_test_any_friend_collects_this_item"
 
     0xd5:"test_units_alive_le_i",
     0xd7:"test_boss_defeated",
