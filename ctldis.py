@@ -35,46 +35,46 @@ disassembled_file_name = base_name+".txt"
 assembled_file_name  = base_name+".CTL"
 
 
-opLengths = {   0x00:1, 0x01:0, 0x02:0, 0x03:0, 0x04:0, 0x05:0, 
-                0x06:0, 0x07:0, 0x08:0, 0x09:1, 0x0a:0, 0x0b:1, 
-                0x0c:1, 0x0d:1, 0x0e:1, 0x0f:1, 0x10:1, 0x11:1, 
-                0x12:0, 0x13:0, 0x14:2, 0x15:0, 0x16:0, 0x17:1, 
-                0x18:1, 0x19:0, 0x1a:0, 0x1b:1, 0x1c:1, 0x1d:0, 
-                0x1e:2, 0x1f:2, 0x20:2, 0x21:2, 0x22:1, 0x23:2, 
-                0x24:2, 0x25:2, 0x26:0, 0x27:0, 0x28:1, 0x29:1, 
-                0x2a:1, 0x2b:0, 0x2c:1, 0x2d:1, 0x2e:1, 0x2f:1, 
-                0x30:1, 0x31:1, 0x32:1, 0x33:1, 0x34:1, 0x35:1, 
-                0x36:1, 0x37:1, 0x38:1, 0x39:1, 0x3a:1, 0x3b:1, 
-                0x3c:2, 0x3d:1, 0x3e:2, 0x3f:1, 0x40:1, 0x41:1, 
-                0x42:2, 0x43:0, 0x44:0, 0x45:0, 0x46:1, 0x47:0, 
-                0x48:0, 0x49:0, 0x4a:0, 0x4b:0, 0x4c:0, 0x4d:0, 
-                0x4e:1, 0x4f:0, 0x50:0, 0x51:0, 0x52:1, 0x53:1, 
-                0x54:1, 0x55:0, 0x56:0, 0x57:0, 0x58:0, 0x59:0, 
-                0x5a:0, 0x5b:0, 0x5c:0, 0x5d:0, 0x5e:0, 0x5f:0, 
-                0x60:0, 0x61:0, 0x62:0, 0x63:0, 0x64:0, 0x65:0, 
-                0x66:0, 0x67:0, 0x68:1, 0x69:1, 0x6a:1, 0x6b:1, 
-                0x6c:0, 0x6d:1, 0x6e:1, 0x6f:1, 0x70:1, 0x71:0, 
-                0x72:0, 0x73:0, 0x74:1, 0x75:1, 0x76:0, 0x77:0, 
-                0x78:0, 0x79:0, 0x7a:1, 0x7b:1, 0x7c:1, 0x7d:1, 
-                0x7e:0, 0x7f:0, 0x80:0, 0x81:1, 0x82:1, 0x83:0, 
-                0x84:0, 0x85:0, 0x86:0, 0x87:1, 0x88:0, 0x89:0, 
-                0x8a:1, 0x8b:3, 0x8c:2, 0x8d:1, 0x8e:0, 0x8f:0, 
-                0x90:1, 0x91:0, 0x92:0, 0x93:1, 0x94:1, 0x95:1, 
-                0x96:0, 0x97:1, 0x98:3, 0x99:3, 0x9a:1, 0x9b:2, 
-                0x9c:0, 0x9d:1, 0x9e:2, 0x9f:0, 0xa0:3, 0xa1:1, 
-                0xa2:3, 0xa3:1, 0xa4:1, 0xa5:1, 0xa6:2, 0xa7:2, 
-                0xa8:2, 0xa9:2, 0xaa:3, 0xab:3, 0xac:3, 0xad:2, 
-                0xae:1, 0xaf:2, 0xb0:1, 0xb1:0, 0xb2:0, 0xb3:1, 
-                0xb4:1, 0xb5:3, 0xb6:2, 0xb7:1, 0xb8:0, 0xb9:0, 
-                0xba:1, 0xbb:0, 0xbc:0, 0xbd:1, 0xbe:0, 0xbf:4, 
-                0xc0:1, 0xc1:1, 0xc2:1, 0xc3:1, 0xc4:1, 0xc5:1, 
-                0xc6:0, 0xc7:0, 0xc8:0, 0xc9:0, 0xca:0, 0xcb:0, 
-                0xcc:0, 0xcd:1, 0xce:1, 0xcf:1, 0xd0:1, 0xd1:1, 
-                0xd2:0, 0xd3:1, 0xd4:0, 0xd5:2, 0xd6:1, 0xd7:1, 
-                0xd8:1, 0xd9:1, 0xda:3, 0xdb:1, 0xdc:1, 0xdd:2, 
-                0xde:2, 0xdf:2, 0xe0:2, 0xe1:2, 0xe2:1, 0xe3:0, 
-                0xe4:1, 0xe5:2, 0xe6:0, 0xe7:2, 0xe8:0, 0xe9:2, 
-                0xea:0, 0xeb:2, 0xec:3, 0xed:0, 0xee:1, 0xef:0, 
+opLengths = {   0x00:1, 0x01:0, 0x02:0, 0x03:0, 0x04:0, 0x05:0,
+                0x06:0, 0x07:0, 0x08:0, 0x09:1, 0x0a:0, 0x0b:1,
+                0x0c:1, 0x0d:1, 0x0e:1, 0x0f:1, 0x10:1, 0x11:1,
+                0x12:0, 0x13:0, 0x14:2, 0x15:0, 0x16:0, 0x17:1,
+                0x18:1, 0x19:0, 0x1a:0, 0x1b:1, 0x1c:1, 0x1d:0,
+                0x1e:2, 0x1f:2, 0x20:2, 0x21:2, 0x22:1, 0x23:2,
+                0x24:2, 0x25:2, 0x26:0, 0x27:0, 0x28:1, 0x29:1,
+                0x2a:1, 0x2b:0, 0x2c:1, 0x2d:1, 0x2e:1, 0x2f:1,
+                0x30:1, 0x31:1, 0x32:1, 0x33:1, 0x34:1, 0x35:1,
+                0x36:1, 0x37:1, 0x38:1, 0x39:1, 0x3a:1, 0x3b:1,
+                0x3c:2, 0x3d:1, 0x3e:2, 0x3f:1, 0x40:1, 0x41:1,
+                0x42:2, 0x43:0, 0x44:0, 0x45:0, 0x46:1, 0x47:0,
+                0x48:0, 0x49:0, 0x4a:0, 0x4b:0, 0x4c:0, 0x4d:0,
+                0x4e:1, 0x4f:0, 0x50:0, 0x51:0, 0x52:1, 0x53:1,
+                0x54:1, 0x55:0, 0x56:0, 0x57:0, 0x58:0, 0x59:0,
+                0x5a:0, 0x5b:0, 0x5c:0, 0x5d:0, 0x5e:0, 0x5f:0,
+                0x60:0, 0x61:0, 0x62:0, 0x63:0, 0x64:0, 0x65:0,
+                0x66:0, 0x67:0, 0x68:1, 0x69:1, 0x6a:1, 0x6b:1,
+                0x6c:0, 0x6d:1, 0x6e:1, 0x6f:1, 0x70:1, 0x71:0,
+                0x72:0, 0x73:0, 0x74:1, 0x75:1, 0x76:0, 0x77:0,
+                0x78:0, 0x79:0, 0x7a:1, 0x7b:1, 0x7c:1, 0x7d:1,
+                0x7e:0, 0x7f:0, 0x80:0, 0x81:1, 0x82:1, 0x83:0,
+                0x84:0, 0x85:0, 0x86:0, 0x87:1, 0x88:0, 0x89:0,
+                0x8a:1, 0x8b:3, 0x8c:2, 0x8d:1, 0x8e:0, 0x8f:0,
+                0x90:1, 0x91:0, 0x92:0, 0x93:1, 0x94:1, 0x95:1,
+                0x96:0, 0x97:1, 0x98:3, 0x99:3, 0x9a:1, 0x9b:2,
+                0x9c:0, 0x9d:1, 0x9e:2, 0x9f:0, 0xa0:3, 0xa1:1,
+                0xa2:3, 0xa3:1, 0xa4:1, 0xa5:1, 0xa6:2, 0xa7:2,
+                0xa8:2, 0xa9:2, 0xaa:3, 0xab:3, 0xac:3, 0xad:2,
+                0xae:1, 0xaf:2, 0xb0:1, 0xb1:0, 0xb2:0, 0xb3:1,
+                0xb4:1, 0xb5:3, 0xb6:2, 0xb7:1, 0xb8:0, 0xb9:0,
+                0xba:1, 0xbb:0, 0xbc:0, 0xbd:1, 0xbe:0, 0xbf:4,
+                0xc0:1, 0xc1:1, 0xc2:1, 0xc3:1, 0xc4:1, 0xc5:1,
+                0xc6:0, 0xc7:0, 0xc8:0, 0xc9:0, 0xca:0, 0xcb:0,
+                0xcc:0, 0xcd:1, 0xce:1, 0xcf:1, 0xd0:1, 0xd1:1,
+                0xd2:0, 0xd3:1, 0xd4:0, 0xd5:2, 0xd6:1, 0xd7:1,
+                0xd8:1, 0xd9:1, 0xda:3, 0xdb:1, 0xdc:1, 0xdd:2,
+                0xde:2, 0xdf:2, 0xe0:2, 0xe1:2, 0xe2:1, 0xe3:0,
+                0xe4:1, 0xe5:2, 0xe6:0, 0xe7:2, 0xe8:0, 0xe9:2,
+                0xea:0, 0xeb:2, 0xec:3, 0xed:0, 0xee:1, 0xef:0,
                 0xf0:1 }
 
 opNames = {
@@ -105,17 +105,17 @@ opNames = {
     0x18:"set_timer",
     0x19:"test_waiting_for_timer",
     0x1a:"wait_for_timer",
-    
+
     0x1b:"set_x_i",
     0x1c:"add_x_i",
     0x1d:"test_x_eq_0",
 
-    0x1e:"set_unit_r_i",    
+    0x1e:"set_unit_r_i",
     0x1f:"add_unit_r_i",
     0x20:"test_unit_r_eq_i",
     0x21:"test_unit_r_eq_r",
     0x22:"set_unit_r_random1to10",
-    
+
     0x23:"set_global_r_i",
     0x24:"add_global_r_i",
     0x25:"test_global_r_eq_i",
@@ -124,45 +124,46 @@ opNames = {
     0x28:"move_to_node",
     0x29:"retreat_to_node",
 
-    0x2a:"patrol_to_waypoint",
-    0x2b:"block_movement",
+    0x2a:"add_waypoint",
+    0x2b:"!!!block_movement",
     0x2c:"wait_unit_flag1_clear",
     0x2d:"wait_unit_flag1_set",
     0x2e:"test_unit_flag1",
     0x2f:"set_unit_flag1",
     0x30:"clear_unit_flag1",
-    
+
     0x31:"wait_unit_flag2_clear",
     0x32:"wait_unit_flag2_set",
     0x33:"test_unit_flag2",
     0x34:"set_unit_flag2",
     0x35:"clear_unit_flag2",
-    
+
     0x36:"wait_unit_flag3_clear",
     0x37:"wait_unit_flag3_set",
     0x38:"test_unit_flag3",
-    
+
     0x39:"set_ctrl_flag",
     0x3a:"clear_ctrl_flag",
     0x3b:"test_ctrl_flag",
 
     0x3d:"set_event_handler",
+    0x3e:"set_callback",
     0x3f:"set_label",
-	
+
     0x40:"store_unit_by_label",
     0x41:"test_label_exists",
     0x42:"send_event_to_self_if_label_exists",
-    
+
     0x4c:"nop_4c",
 
     0x4e:"goto_iftrue",
-	
+
     0x52:"move_rand_in_radius",
 
     0x53:"init_teleport",
     0x54:"teleport_to",
     0x55:"teleport_to2",
-    
+
     0x5a:"charge",
     0x5c:"retreat",
     0x65:"hold",
@@ -194,15 +195,15 @@ opNames = {
 
     0x93:"test_magic_points_leq_i",
     0x94:"add_magic_points",
-	
+
     0x97:"init_teleport_spell",
-    0x98:"cast_spell",
-    0x99:"cast_spell2",
+    0x98:"cast_spell_on_other",
+    0x99:"cast_spell_on_self",
     0x9d:"add_spell",
 
     0xa2:"search_and_attack_enemy",
     0xac:"search_and_shoot_enemy",
-    
+
     0xae:"play_self",
     0xaf:"play_other",
 
@@ -217,7 +218,7 @@ opNames = {
     0xba:"test_unit_class",
     0xbd:"set_unit_class",
     0xbf:"spawn_unit",
-    
+
     0xc0:"test_members_alive_geq_i",
     0xc1:"test_label_eq_i",
     0xc2:"test_event_source_eq_i",
@@ -235,26 +236,202 @@ opNames = {
 
     0xd5:"test_units_alive_le_i",
     0xd7:"test_boss_defeated",
-    0xd8:"test_unit_alive",
-    0xd9:"test_user_action",       
+    0xd8:"test_other_unit_alive",
+    0xd9:"test_user_action",
     0xda:"ui_indicate",
     0xdd:"set_unit_r_direction",
     0xde:"test_unit_at_node",
     0xdf:"test_unit_attacking",
     0xe0:"test_other_unit_flag2",
     0xe1:"test_other_unit_flag3",
-    
+
     0xe2:"test_unit_selected",
     0xe3:"test_any_spell_selected",
-    
+
     0xe6:"test_mapmode",
     0xe7:"test_unit_at_node2",
-    
+
     0xea:"test_sound_playing",
     0xeb:"test_other_unit_flag1",
     0xec:"test_other_unit_r_eq_i",
     0xed:"end_mission",
     0xee:"test_event_from_unit",
+}
+
+Arg_Unused = 0
+Arg_Any = 1
+Arg_Function = 2
+Arg_Event = 3
+Arg_Register = 4
+Arg_GlobalRegister = 5
+Arg_BtbNode = 6
+Arg_BtbNodeId = 7
+Arg_UF1 = 8
+Arg_UF2 = 9
+Arg_UF3 = 10
+Arg_CtrlFlag = 11
+Arg_Label = 12
+Arg_EndEvent = 13
+Arg_Missile = 14
+Arg_UnitType = 15
+Arg_Item = 16
+Arg_MagicFlag = 17
+Arg_MagicBook = 18
+Arg_Attribute = 19
+Arg_Voice = 20
+Arg_Unit = 21
+Arg_Alignment = 22
+Arg_Spawn = 23
+Arg_GameStatus = 24
+Arg_Objective = 25
+Arg_Boss = 26
+Arg_UnitId = 27
+
+opTypes = {
+    0x00: [Arg_Unused],
+    0x09: [Arg_Any],
+    0x0b: [Arg_Function],
+    0x0c: [Arg_Function],
+    0x0d: [Arg_Function],
+    0x0e: [Arg_Function],
+    0x0f: [Arg_Function],
+    0x10: [Arg_Function],
+    0x11: [Arg_Function],
+    0x14: [Arg_Any, Arg_Event],
+    0x17: [Arg_Any],
+    0x18: [Arg_Any],
+    0x1b: [Arg_Any],
+    0x1c: [Arg_Any],
+    0x1e: [Arg_Register, Arg_Any],
+    0x1f: [Arg_Register, Arg_Any],
+    0x20: [Arg_Register, Arg_Any],
+    0x21: [Arg_Register, Arg_Register],
+    0x22: [Arg_Register],
+    0x23: [Arg_GlobalRegister, Arg_Any],
+    0x24: [Arg_GlobalRegister, Arg_Any],
+    0x25: [Arg_GlobalRegister, Arg_Any],
+    0x28: [Arg_BtbNode],
+    0x29: [Arg_BtbNode],
+    0x2a: [Arg_BtbNodeId],
+    0x2c: [Arg_UF1],
+    0x2d: [Arg_UF1],
+    0x2e: [Arg_UF1],
+    0x2f: [Arg_UF1],
+    0x30: [Arg_UF1],
+    0x31: [Arg_UF2],
+    0x32: [Arg_UF2],
+    0x33: [Arg_UF2],
+    0x34: [Arg_UF2],
+    0x35: [Arg_UF2],
+    0x36: [Arg_UF3],
+    0x37: [Arg_UF3],
+    0x38: [Arg_UF3],
+    0x39: [Arg_CtrlFlag],
+    0x3a: [Arg_CtrlFlag],
+    0x3b: [Arg_CtrlFlag],
+    0x3c: [Arg_Any, Arg_Unused],
+    0x3d: [Arg_Function],
+    0x3e: [Arg_Any, Arg_Any],
+    0x3f: [Arg_Label],
+    0x40: [Arg_Label],
+    0x41: [Arg_Label],
+    0x42: [Arg_Event, Arg_Label],
+    0x46: [Arg_Event],
+    0x4e: [Arg_Function],
+    0x52: [Arg_BtbNodeId],
+    0x53: [Arg_BtbNode],
+    0x54: [Arg_BtbNode],
+    0x68: [Arg_Any],
+    0x69: [Arg_Event],
+    0x6a: [Arg_Event],
+    0x6b: [Arg_Event],
+    0x6d: [Arg_Event],
+    0x6e: [Arg_Event],
+    0x6f: [Arg_Event],
+    0x70: [Arg_Event],
+    0x74: [Arg_Event],
+    0x75: [Arg_EndEvent],
+    0x7a: [Arg_Unused],
+    0x7b: [Arg_Unused],
+    0x7c: [Arg_Unused],
+    0x7d: [Arg_Unused],
+    0x81: [Arg_Any],
+    0x82: [Arg_UF1],
+    0x87: [Arg_Any],
+    0x8a: [Arg_Any],
+    0x8b: [Arg_Any]*3,
+    0x8c: [Arg_Any]*2,
+    0x8d: [Arg_Missile],
+    0x90: [Arg_Unused],
+    0x93: [Arg_Any],
+    0x94: [Arg_Any],
+    0x95: [Arg_Any],
+    0x97: [Arg_BtbNode],
+    0x98: [Arg_Event, Arg_MagicFlag, Arg_Any],
+    0x99: [Arg_Event, Arg_MagicFlag, Arg_Any],
+    0x9a: [Arg_Unused],
+    0x9b: [Arg_Unused]*2,
+    0x9d: [Arg_Item],
+    0x9e: [Arg_MagicBook, Arg_Any],
+    0xa0: [Arg_Unused]*3,
+    0xa1: [Arg_Any],
+    0xa2: [Arg_Event, Arg_UF1, Arg_Attribute],
+    0xa3: [Arg_Event],
+    0xa4: [Arg_Event],
+    0xa5: [Arg_Event],
+    0xa6: [Arg_Event, Arg_UnitType],
+    0xa7: [Arg_Event, Arg_UnitType],
+    0xa8: [Arg_Event, Arg_Any],
+    0xa9: [Arg_Event, Arg_Any],
+    0xaa: [Arg_Event, Arg_UnitType, Arg_Any],
+    0xab: [Arg_Event, Arg_UnitType, Arg_Any],
+    0xac: [Arg_Event, Arg_Any, Arg_UF1],
+    0xad: [Arg_Any, Arg_Any],
+    0xae: [Arg_Voice],
+    0xaf: [Arg_Voice, Arg_Unit],
+    0xb0: [Arg_Any],
+    0xb3: [Arg_BtbNode],
+    0xb4: [Arg_BtbNode],
+    0xb5: [Arg_Alignment, Arg_BtbNode, Arg_UF1],
+    0xb6: [Arg_Label, Arg_Event],
+    0xb7: [Arg_Event],
+    0xba: [Arg_UnitType],
+    0xbd: [Arg_UnitType],
+    0xbf: [Arg_Spawn, Arg_Function, Arg_Any, Arg_Any],
+    0xc0: [Arg_Any],
+    0xc1: [Arg_Label],
+    0xc2: [Arg_Unit],
+    0xc3: [Arg_GameStatus],
+    0xc4: [Arg_Objective],
+    0xc5: [Arg_Any],
+    0xcd: [Arg_Attribute],
+    0xce: [Arg_Attribute],
+    0xcf: [Arg_Attribute],
+    0xd0: [Arg_Item],
+    0xd1: [Arg_Any],
+    0xd3: [Arg_Item],
+    0xd5: [Arg_Any, Arg_Alignment],
+    0xd6: [Arg_Alignment],
+    0xd7: [Arg_Boss],
+    0xd8: [Arg_Unit],
+    0xd9: [Arg_Any],
+    0xda: [Arg_Any]*3,
+    0xdb: [Arg_Unit],
+    0xdc: [Arg_Unit],
+    0xdd: [Arg_Unit, Arg_Register],
+    0xde: [Arg_Unit, Arg_BtbNode],
+    0xdf: [Arg_Unit, Arg_Unit],
+    0xe0: [Arg_Unit, Arg_UF2],
+    0xe1: [Arg_Unit, Arg_UF3],
+    0xe2: [Arg_Unit],
+    0xe4: [Arg_Unit],
+    0xe5: [Arg_Unit, Arg_UnitId],
+    0xe7: [Arg_Unit, Arg_BtbNode],
+    0xe9: [Arg_Unit, Arg_Item],
+    0xeb: [Arg_Unit, Arg_UF1],
+    0xec: [Arg_Unit, Arg_Register],
+    0xee: [Arg_Unit],
+    0xf0: [Arg_Unused]
 }
 
 class Prettifier:
@@ -319,70 +496,31 @@ class Prettifier:
 
     @staticmethod
     def flag_prettifier(flag, lookup_dict):
-        return [" | ".join(
+        s = " | ".join(
             map(lambda x: lookup_dict.get(x, hex(x)), Prettifier.get_bits_set(int(flag)))
-        )]
+        )
+        return s if len(s) > 0 else "0"
 
     prettifier = {
-        "test_unit_flag1": [
+        Arg_UF1: [
             lambda flag: Prettifier.flag_prettifier(flag, Prettifier.unit_flag_1),
             lambda flag: int(flag, 16)
         ],
-        "set_unit_flag1": [
-            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.unit_flag_1),
-            lambda flag: int(flag, 16)
-        ],
-        "clear_unit_flag1": [
-            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.unit_flag_1),
-            lambda flag: int(flag, 16)
-        ],
-        "wait_unit_flag1_clear": [
-            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.unit_flag_1),
-            lambda flag: int(flag, 16)
-        ],
-        "test_unit_flag2": [
+        Arg_UF2: [
             lambda flag: Prettifier.flag_prettifier(flag, Prettifier.unit_flag_2),
             lambda flag: int(flag, 16)
         ],
-        "set_unit_flag2": [
-            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.unit_flag_2),
-            lambda flag: int(flag, 16)
-        ],
-        "clear_unit_flag2": [
-            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.unit_flag_2),
-            lambda flag: int(flag, 16)
-        ],
-        "wait_unit_flag2_clear": [
-            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.unit_flag_2),
-            lambda flag: int(flag, 16)
-        ],
-        "test_unit_flag3": [
+        Arg_UF3: [
             lambda flag: Prettifier.flag_prettifier(flag, Prettifier.unit_flag_3),
             lambda flag: int(flag, 16)
         ],
-        "set_unit_flag3": [
-            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.unit_flag_3),
-            lambda flag: int(flag, 16)
-        ],
-        "clear_unit_flag3": [
-            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.unit_flag_3),
-            lambda flag: int(flag, 16)
-        ],
-        "wait_unit_flag3_clear": [
-            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.unit_flag_3),
-            lambda flag: int(flag, 16)
-        ],
-        "set_attribute": [
+        Arg_Attribute: [
             lambda flag: Prettifier.flag_prettifier(flag, Prettifier.attributes),
             lambda x: x
         ],
-        "test_attribute_set": [
-            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.attributes),
-            lambda x: x
-        ],
-        "clear_attribute": [
-            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.attributes),
-            lambda x: x
+        Arg_Unused: [
+            lambda arg: "Unused_" + arg,
+            lambda arg: ""
         ]
     }
 
@@ -395,7 +533,7 @@ class CTLFileReader(object):
         self.__LoadFile(path)
         self.__ConstructOffs()
         self.__ConstructEndList()
-                
+
     def __LoadFile(self, path):
         F = open(path, "rb")
         self.data = array("i")
@@ -442,7 +580,7 @@ class DisassembledFunction(object):
 
     def Print(self, stream=None):
         indent = 1
-        
+
         for tokens in self.lines:
             op = tokens[0]
             args = tokens[1:]
@@ -487,7 +625,7 @@ class DisassembledFunction(object):
             for arg in spLine[1:]:
                 assFunc.data.append(int(arg))
         return assFunc
-    
+
 class AssembledFunction(object):
     def __init__(self, name, src=None):
         self.name = name
@@ -500,13 +638,13 @@ class AssembledFunction(object):
         opList = self.data[:]
         decompiledFunc = DisassembledFunction()
         decompiledFunc.lines.append([".func", self.name])
-        
+
         while len(opList) > 0:
             opcode = opList.pop(0)
             sopcode = opcode
             if (sopcode & 0x8000):
                 sopcode = (~sopcode + 1)
-                
+
             if sopcode >= 0:
                 if opcode == 0xabc:
                     decompiledFunc.lines.append(["@0xABC"])
@@ -519,32 +657,35 @@ class AssembledFunction(object):
                 shortOp = (opcode & 0x7FFF)
                 argCount = opLengths[shortOp]
                 opName = opNames.get(shortOp, "#%.2x"%shortOp)
-                
+
                 newLine = []
 
-                for i in range(argCount):
-                    newLine.append(str(opList.pop(0)))
-
-                if opName in Prettifier.prettifier:
-                    newLine = Prettifier.prettifier[opName][0](*newLine)
+                if argCount > 0:
+                    argTypes = opTypes[shortOp]
+                    print(str(shortOp) + " " + str(argCount))
+                    for i in range(argCount):
+                        if argTypes[i] in Prettifier.prettifier:
+                            newLine.append(Prettifier.prettifier[argTypes[i]][0](str(opList.pop(0))))
+                        else:
+                            newLine.append(str(opList.pop(0)))
 
                 #formLine = "%s %s" % (opName, ", ".join(newLine))
                 decompiledFunc.lines.append([opName] + newLine)
 
         return decompiledFunc
-            
+
 class DisctlFileReader(object):
     def __init__(self, path):
         F = open(path, "rt")
         lines = F.readlines()
         F.close()
-        
+
         self.funcs = []
         curFunc = None
         while (len(lines) > 0):
             line = lines.pop(0)
             if (".func" in line):
-                if curFunc != None: self.funcs.append(curFunc)           
+                if curFunc != None: self.funcs.append(curFunc)
                 curFunc = DisassembledFunction()
             line = line.partition(";")[0]
             line = line.strip()
@@ -563,7 +704,7 @@ class CTLFileWriter(object):
 
     def close(self):
         from struct import pack
-        
+
         extOrds = []
         stdOrds = []
         for ordinal in self.funcs:
