@@ -8,6 +8,7 @@ import sys
 from os import path
 from shutil import copyfile
 from collections import defaultdict
+import sys
 
 if len(sys.argv) > 1:
     base_name = sys.argv[1].upper()
@@ -528,7 +529,7 @@ class AssembledFunction(object):
                     newLine = Prettifier.prettifier[opName][0](*newLine)
 
                 #formLine = "%s %s" % (opName, ", ".join(newLine))
-                decompiledFunc.lines.append([opName, *newLine])
+                decompiledFunc.lines.append([opName] + newLine)
 
         return decompiledFunc
             
@@ -588,6 +589,9 @@ class CTLFileWriter(object):
 
 if MODE == 1:
     if path.exists(disassembled_file_name):
+        if sys.version_info[0] < 3:
+           input = raw_input
+
         ans = input("A decompiled script already exists. Overwrite? [y/n] ")
 
         if ans != "y":
