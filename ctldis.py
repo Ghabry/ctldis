@@ -515,7 +515,7 @@ class Prettifier:
     }
 
     event = {
-        -1: "NoEvent"
+        -1: "No_Event"
     }
 
     items = {
@@ -584,7 +584,7 @@ class Prettifier:
     }
 
     missiles = {
-        0: "None",
+        -1: "No_Missile",
         7: "Short_Bow",
         8: "Normal_Bow",
         9: "Elven Bow",
@@ -602,7 +602,7 @@ class Prettifier:
         8: "Infantry",
         16: "Cavalry",
         24: "Archer",
-        32: "Artillety",
+        32: "Artillery",
         40: "Wizard",
         48: "Monster",
         56: "Chariot",
@@ -673,14 +673,20 @@ class Prettifier:
         return bits
 
     @staticmethod
-    def flag_prettifier(flag, lookup_dict):
+    def flag_prettifier(flag, lookup_dict, prefix):
         s = " | ".join(
             map(lambda x: lookup_dict.get(x, hex(x)), Prettifier.get_bits_set(int(flag)))
         )
-        return s if len(s) > 0 else "0"
+        return Prettifier.wrap(prefix, s) if len(s) > 0 else Prettifier.wrap(prefix, "0")
 
     @staticmethod
     def flag_prettifier_back(flag, lookup_dict):
+        beg = flag.find("(")
+        end = flag.find(")")
+
+        if beg > -1 and end > -1:
+            flag = flag[beg+1:end]
+
         flags = map(lambda x: x.strip(), flag.split("|"))
 
         flags_back = []
@@ -695,24 +701,21 @@ class Prettifier:
         return sum([int(x) for x in flags_back])
 
     @staticmethod
-    def substitute(val, lookup_dict, prefix):
+    def substitute(val, lookup_dict, name):
         v = lookup_dict.get(int(val))
 
         if v:
             return v
 
-        return prefix + "_" + val
+        return Prettifier.wrap(name, val)
 
     @staticmethod
-    def substitute_back(val, lookup_dict, prefix):
+    def substitute_back(val, lookup_dict):
         for k, v in lookup_dict.items():
             if v == val:
                 return int(k)
 
-        try:
-            return int(val)
-        except ValueError:
-            return int(val[len(prefix)+1:])
+        return Prettifier.wrap_back(val)
 
     @staticmethod
     def wrap(name, val):
@@ -767,8 +770,8 @@ class Prettifier:
             lambda a: Prettifier.wrap_back(a)
         ],
         Arg_Event: [
-            lambda a: Prettifier.substitute(a, Prettifier.event, "Event"),
-            lambda a: Prettifier.substitute_back(a, Prettifier.event, "Event")
+            lambda a: Prettifier.substitute(a, Prettifier.event, "E"),
+            lambda a: Prettifier.substitute_back(a, Prettifier.event)
         ],
         Arg_Register: [
             lambda a: Prettifier.wrap("R", a),
@@ -787,19 +790,19 @@ class Prettifier:
             lambda a: Prettifier.wrap_back(a)
         ],
         Arg_UF1: [
-            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.unit_flag_1),
+            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.unit_flag_1, "UF1"),
             lambda flag: Prettifier.flag_prettifier_back(flag, Prettifier.unit_flag_1)
         ],
         Arg_UF2: [
-            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.unit_flag_2),
+            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.unit_flag_2, "UF2"),
             lambda flag: Prettifier.flag_prettifier_back(flag, Prettifier.unit_flag_2)
         ],
         Arg_UF3: [
-            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.unit_flag_3),
+            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.unit_flag_3, "UF3"),
             lambda flag: Prettifier.flag_prettifier_back(flag, Prettifier.unit_flag_3)
         ],
         Arg_CtrlFlag: [
-            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.ctrl_flag),
+            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.ctrl_flag, "CF"),
             lambda flag: Prettifier.flag_prettifier_back(flag, Prettifier.ctrl_flag)
         ],
         Arg_Label: [
@@ -812,27 +815,27 @@ class Prettifier:
         ],
         Arg_Missile: [
             lambda flag: Prettifier.substitute(flag, Prettifier.missiles, "Missile"),
-            lambda flag: Prettifier.substitute_back(flag, Prettifier.missiles, "Missile")
+            lambda flag: Prettifier.substitute_back(flag, Prettifier.missiles)
         ],
         Arg_UnitType: [
             lambda flag: Prettifier.substitute(flag, Prettifier.unit_type, "Type"),
-            lambda flag: Prettifier.substitute_back(flag, Prettifier.unit_type, "Type")
+            lambda flag: Prettifier.substitute_back(flag, Prettifier.unit_type)
         ],
         Arg_Item: [
             lambda a: Prettifier.substitute(a, Prettifier.items, "Magic"),
-            lambda a: Prettifier.substitute_back(a, Prettifier.items, "Magic")
+            lambda a: Prettifier.substitute_back(a, Prettifier.items)
         ],
         Arg_MagicFlag: [
-            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.magic_flag),
+            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.magic_flag, "MF"),
             lambda flag: Prettifier.flag_prettifier_back(flag, Prettifier.magic_flag)
         ],
         Arg_Attribute: [
-            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.attributes),
+            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.attributes, "Attrib"),
             lambda flag: Prettifier.flag_prettifier_back(flag, Prettifier.attributes)
         ],
         Arg_Voice: [
             lambda a: Prettifier.substitute(a, Prettifier.voice, "Voice"),
-            lambda a: Prettifier.substitute_back(a, Prettifier.voice, "Voice")
+            lambda a: Prettifier.substitute_back(a, Prettifier.voice)
         ],
         Arg_Unit: [
             lambda a: Prettifier.wrap("ID", a),
@@ -840,19 +843,19 @@ class Prettifier:
         ],
         Arg_Alignment: [
             lambda a: Prettifier.substitute(a, Prettifier.alignment, "Alignment"),
-            lambda a: Prettifier.substitute_back(a, Prettifier.alignment, "Alignment")
+            lambda a: Prettifier.substitute_back(a, Prettifier.alignment)
         ],
         Arg_Spawn: [
             lambda a: Prettifier.substitute(a, Prettifier.spawn, "Spawn"),
-            lambda a: Prettifier.substitute_back(a, Prettifier.spawn, "Spawn")
+            lambda a: Prettifier.substitute_back(a, Prettifier.spawn)
         ],
         Arg_GameStatus: [
             lambda a: Prettifier.substitute(a, Prettifier.game_status, "GameStatus"),
-            lambda a: Prettifier.substitute_back(a, Prettifier.game_status, "GameStatus")
+            lambda a: Prettifier.substitute_back(a, Prettifier.game_status)
         ],
         Arg_Objective: [
             lambda a: Prettifier.substitute(a, Prettifier.objective, "Objective"),
-            lambda a: Prettifier.substitute_back(a, Prettifier.objective, "Objective")
+            lambda a: Prettifier.substitute_back(a, Prettifier.objective)
         ],
         Arg_Boss: [
             lambda a: Prettifier.substitute(a, Prettifier.boss, "Boss"),
