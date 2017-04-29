@@ -759,6 +759,10 @@ class Prettifier:
         else:
             return int(val, 0)
 
+    label_dict = {
+
+    }
+
     prettifier = {
         Arg_Unused: [
             lambda a: Prettifier.wrap("X", a),
@@ -806,7 +810,7 @@ class Prettifier:
             lambda flag: Prettifier.flag_prettifier_back(flag, Prettifier.ctrl_flag)
         ],
         Arg_Label: [
-            lambda a: hex(int(a)), # TODO tracking
+            lambda a: hex(int(a)),
             lambda a: int(a, 0)
         ],
         Arg_EndEvent: [
@@ -1024,11 +1028,22 @@ class AssembledFunction(object):
                 if argCount > 0:
                     argTypes = opTypes[shortOp]
 
+                    add_label_annotation = None
+
                     for i in range(argCount):
                         if argTypes[i] in Prettifier.prettifier:
+                            if argTypes[i] == Arg_Label:
+                                if shortOp == 0x3f and opList[0] not in Prettifier.label_dict:
+                                    Prettifier.label_dict[opList[0]] = self.name
+                                else:
+                                    add_label_annotation = Prettifier.label_dict.get(opList[0])
+
                             newLine.append(Prettifier.prettifier[argTypes[i]][0](str(opList.pop(0))))
                         else:
                             newLine.append(str(opList.pop(0)))
+
+                    if add_label_annotation is not None:
+                        newLine[-1] = newLine[-1] + " ; label assigned in func {}".format(add_label_annotation)
 
                 decompiledFunc.lines.append([opName] + newLine)
 
