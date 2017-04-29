@@ -287,8 +287,8 @@ Arg_Function = 2
 Arg_Event = 3
 Arg_Register = 4
 Arg_GlobalRegister = 5
-Arg_BtbNode = 6
-Arg_BtbNodeId = 7
+Arg_BtbNode = 6 # Incrementing number of BTB-6000
+Arg_BtbNodeId = 7 # Real ID of a BTB-6000 node
 Arg_UF1 = 8
 Arg_UF2 = 9
 Arg_UF3 = 10
@@ -301,7 +301,7 @@ Arg_Item = 16
 Arg_MagicFlag = 17
 Arg_Attribute = 18
 Arg_Voice = 19
-Arg_Unit = 20
+Arg_Unit = 20 # Incrementing number of Enemy+Friends
 Arg_Alignment = 21
 Arg_Spawn = 22
 Arg_GameStatus = 23
@@ -465,9 +465,18 @@ class Prettifier:
         0x2: "Casting",
         0x4: "Shooting"
     }
+
     unit_flag_3 = {
         0x1000: "MovingToTarget",
         0x2000: "CollectingItem"
+    }
+
+    ctrl_flag = {
+
+    }
+
+    magic_flag = {
+
     }
 
     attributes = {
@@ -503,6 +512,10 @@ class Prettifier:
         0x20000000: "FearElves",
         0x40000000: "Unknown3",
         0x80000000: "Unknown4"
+    }
+
+    event = {
+        -1: "NoEvent"
     }
 
     items = {
@@ -570,6 +583,84 @@ class Prettifier:
         62: "Treasure_Chest_300gc",
     }
 
+    missiles = {
+        0: "None",
+        7: "Short_Bow",
+        8: "Normal_Bow",
+        9: "Elven Bow",
+        10: "Crossbow",
+        11: "Pistole",
+        12: "Cannon",
+        13: "Mortar",
+        14: "Steam_Tank",
+        15: "Rock_Lobber",
+        16: "Ballista",
+        17: "Screaming_Skull"
+    }
+
+    unit_type = {
+        8: "Infantry",
+        16: "Cavalry",
+        24: "Archer",
+        32: "Artillety",
+        40: "Wizard",
+        48: "Monster",
+        56: "Chariot",
+        64: "Misc"
+    }
+
+    alignment = {
+
+    }
+
+    voice = {
+
+    }
+
+    spawn = {
+        1: "Fanatic",
+        2: "Zombie"
+    }
+
+    game_status = {
+
+    }
+
+    objective = {
+        1: "Objective_A",
+        2: "Objective_B",
+        3: "Objective_C",
+        4: "Objective_D",
+        5: "Objective_E",
+        6: "Objective_F",
+        7: "Objective_G",
+        8: "Objective_H",
+        9: "Objective_I",
+        10: "Objective_J",
+        11: "Objective_K",
+        12: "Objective_L",
+        13: "Objective_M",
+        14: "Objective_N",
+        15: "Objective_O",
+        16: "Objective_P",
+        17: "Objective_Q",
+        18: "Objective_R",
+        19: "Objective_S",
+        20: "Objective_T",
+        21: "Objective_U",
+        22: "Objective_V",
+        23: "Objective_W",
+        24: "Objective_X",
+        25: "Objective_Y",
+        26: "Objective_Z"
+    }
+
+    boss = {
+        1: "Carstein",
+        2: "Nagash",
+        3: "Black_Grail"
+    }
+
     @staticmethod
     def get_bits_set(x):
         bits = []
@@ -621,7 +712,7 @@ class Prettifier:
         try:
             return int(val)
         except ValueError:
-            return int(val[prefix+1:])
+            return int(val[len(prefix)+1:])
 
     @staticmethod
     def wrap(name, val):
@@ -648,7 +739,7 @@ class Prettifier:
         return int(minus + val[beg:end])
 
     @staticmethod
-    def event(val):
+    def end_event(val):
         if val == "6844":
             return "Filter"
         elif val == "3567":
@@ -657,7 +748,7 @@ class Prettifier:
             return hex(int(val))
 
     @staticmethod
-    def event_back(val):
+    def end_event_back(val):
         if val == "Filter":
             return 6844
         elif val == "Propagate":
@@ -666,6 +757,35 @@ class Prettifier:
             return int(val, 0)
 
     prettifier = {
+        Arg_Unused: [
+            lambda a: Prettifier.wrap("X", a),
+            lambda a: Prettifier.wrap_back(a)
+        ],
+        # Arg_Any
+        Arg_Function: [
+            lambda a: Prettifier.wrap("F", a),
+            lambda a: Prettifier.wrap_back(a)
+        ],
+        Arg_Event: [
+            lambda a: Prettifier.substitute(a, Prettifier.event, "Event"),
+            lambda a: Prettifier.substitute_back(a, Prettifier.event, "Event")
+        ],
+        Arg_Register: [
+            lambda a: Prettifier.wrap("R", a),
+            lambda a: Prettifier.wrap_back(a)
+        ],
+        Arg_GlobalRegister: [
+            lambda a: Prettifier.wrap("G", a),
+            lambda a: Prettifier.wrap_back(a)
+        ],
+        Arg_BtbNode: [
+            lambda a: Prettifier.wrap("BTB", a),
+            lambda a: Prettifier.wrap_back(a)
+        ],
+        Arg_BtbNodeId: [
+            lambda a: Prettifier.wrap("BTBId", a),
+            lambda a: Prettifier.wrap_back(a)
+        ],
         Arg_UF1: [
             lambda flag: Prettifier.flag_prettifier(flag, Prettifier.unit_flag_1),
             lambda flag: Prettifier.flag_prettifier_back(flag, Prettifier.unit_flag_1)
@@ -679,39 +799,67 @@ class Prettifier:
             lambda flag: Prettifier.flag_prettifier_back(flag, Prettifier.unit_flag_3)
         ],
         Arg_CtrlFlag: [
-            lambda flag: Prettifier.flag_prettifier(flag, {}),
-            lambda flag: Prettifier.flag_prettifier_back(flag, {})
-        ],
-        Arg_MagicFlag: [
-            lambda flag: Prettifier.flag_prettifier(flag, {}),
-            lambda flag: Prettifier.flag_prettifier_back(flag, {})
+            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.ctrl_flag),
+            lambda flag: Prettifier.flag_prettifier_back(flag, Prettifier.ctrl_flag)
         ],
         Arg_Label: [
-            lambda a: hex(int(a)),
+            lambda a: hex(int(a)), # TODO tracking
             lambda a: int(a, 0)
         ],
-        Arg_Attribute: [
-            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.attributes),
-            lambda flag: Prettifier.flag_prettifier_back(flag, Prettifier.attributes)
+        Arg_EndEvent: [
+            lambda a: Prettifier.end_event(a),
+            lambda a: Prettifier.end_event_back(a)
+        ],
+        Arg_Missile: [
+            lambda flag: Prettifier.substitute(flag, Prettifier.missiles, "Missile"),
+            lambda flag: Prettifier.substitute_back(flag, Prettifier.missiles, "Missile")
+        ],
+        Arg_UnitType: [
+            lambda flag: Prettifier.substitute(flag, Prettifier.unit_type, "Type"),
+            lambda flag: Prettifier.substitute_back(flag, Prettifier.unit_type, "Type")
         ],
         Arg_Item: [
             lambda a: Prettifier.substitute(a, Prettifier.items, "Magic"),
             lambda a: Prettifier.substitute_back(a, Prettifier.items, "Magic")
         ],
-        Arg_Event: [
-            lambda a: Prettifier.wrap("E", a),
+        Arg_MagicFlag: [
+            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.magic_flag),
+            lambda flag: Prettifier.flag_prettifier_back(flag, Prettifier.magic_flag)
+        ],
+        Arg_Attribute: [
+            lambda flag: Prettifier.flag_prettifier(flag, Prettifier.attributes),
+            lambda flag: Prettifier.flag_prettifier_back(flag, Prettifier.attributes)
+        ],
+        Arg_Voice: [
+            lambda a: Prettifier.substitute(a, Prettifier.voice, "Voice"),
+            lambda a: Prettifier.substitute_back(a, Prettifier.voice, "Voice")
+        ],
+        Arg_Unit: [
+            lambda a: Prettifier.wrap("ID", a),
             lambda a: Prettifier.wrap_back(a)
         ],
-        Arg_Function: [
-            lambda a: Prettifier.wrap("F", a),
-            lambda a: Prettifier.wrap_back(a)
+        Arg_Alignment: [
+            lambda a: Prettifier.substitute(a, Prettifier.alignment, "Alignment"),
+            lambda a: Prettifier.substitute_back(a, Prettifier.alignment, "Alignment")
         ],
-        Arg_EndEvent: [
-            lambda a: Prettifier.event(a),
-            lambda a: Prettifier.event_back(a)
+        Arg_Spawn: [
+            lambda a: Prettifier.substitute(a, Prettifier.spawn, "Spawn"),
+            lambda a: Prettifier.substitute_back(a, Prettifier.spawn, "Spawn")
         ],
-        Arg_Unused: [
-            lambda a: Prettifier.wrap("X", a),
+        Arg_GameStatus: [
+            lambda a: Prettifier.substitute(a, Prettifier.game_status, "GameStatus"),
+            lambda a: Prettifier.substitute_back(a, Prettifier.game_status, "GameStatus")
+        ],
+        Arg_Objective: [
+            lambda a: Prettifier.substitute(a, Prettifier.objective, "Objective"),
+            lambda a: Prettifier.substitute_back(a, Prettifier.objective, "Objective")
+        ],
+        Arg_Boss: [
+            lambda a: Prettifier.substitute(a, Prettifier.boss, "Boss"),
+            lambda a: Prettifier.substitute_back(a, Prettifier.boss, "Boss")
+        ],
+        Arg_UnitId: [
+            lambda a: Prettifier.wrap("UID", a),
             lambda a: Prettifier.wrap_back(a)
         ]
     }
