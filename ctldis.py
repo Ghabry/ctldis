@@ -410,7 +410,7 @@ opTypes = {
     0xac: [Arg_Event, Arg_Any, Arg_UF1],
     0xad: [Arg_Any, Arg_Any],
     0xae: [Arg_Voice],
-    0xaf: [Arg_Voice, Arg_Unit],
+    0xaf: [Arg_Unit, Arg_Voice],
     0xb0: [Arg_Any],
     0xb3: [Arg_BtbNode],
     0xb4: [Arg_BtbNode],
