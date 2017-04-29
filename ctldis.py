@@ -154,7 +154,7 @@ opNames = {
     0x41:"test_label_exists",
     0x42:"send_event_to_self_if_label_exists",
 
-	#0x44:"test_self_and_target_can_fight",
+    0x44:"test_can_fight_and_sender_does_not_retreat",
 
     0x4c:"nop_4c",
 
@@ -589,8 +589,23 @@ class Prettifier:
         return s if len(s) > 0 else "0"
 
     @staticmethod
+    def flag_prettifier_back(flag, lookup_dict):
+        flags = map(lambda x: x.strip(), flag.split("|"))
+
+        flags_back = []
+        for f in flags:
+            try:
+                flags_back.append(int(f, 0))
+            except ValueError:
+                for k, v in lookup_dict.items():
+                    if v == f:
+                        flags_back.append(k)
+                        break
+        return sum([int(x) for x in flags_back])
+
+    @staticmethod
     def substitute(val, lookup_dict, prefix):
-        v = Prettifier.items.get(int(val))
+        v = lookup_dict.get(int(val))
 
         if v:
             return v
@@ -598,57 +613,106 @@ class Prettifier:
         return prefix + "_" + val
 
     @staticmethod
+    def substitute_back(val, lookup_dict, prefix):
+        for k, v in lookup_dict.items():
+            if v == val:
+                return int(k)
+
+        try:
+            return int(val)
+        except ValueError:
+            return int(val[prefix+1:])
+
+    @staticmethod
     def wrap(name, val):
         return name + "(" + val + ")"
+
+    @staticmethod
+    def wrap_back(val):
+        beg = None
+        end = 0
+        minus = ""
+
+        for e, s in enumerate(val):
+            if s.isdigit():
+                if beg is None:
+                    beg = e
+            else:
+                if beg is not None:
+                    end = e
+                    break
+
+        if beg:
+            minus = "-" if val[beg - 1] == "-" else ""
+
+        return int(minus + val[beg:end])
+
+    @staticmethod
+    def event(val):
+        if val == "6844":
+            return "Filter"
+        elif val == "3567":
+            return "Propagate"
+        else:
+            return hex(int(val))
+
+    @staticmethod
+    def event_back(val):
+        if val == "Filter":
+            return 6844
+        elif val == "Propagate":
+            return 3567
+        else:
+            return int(val, 0)
 
     prettifier = {
         Arg_UF1: [
             lambda flag: Prettifier.flag_prettifier(flag, Prettifier.unit_flag_1),
-            lambda flag: int(flag, 16)
+            lambda flag: Prettifier.flag_prettifier_back(flag, Prettifier.unit_flag_1)
         ],
         Arg_UF2: [
             lambda flag: Prettifier.flag_prettifier(flag, Prettifier.unit_flag_2),
-            lambda flag: int(flag, 16)
+            lambda flag: Prettifier.flag_prettifier_back(flag, Prettifier.unit_flag_2)
         ],
         Arg_UF3: [
             lambda flag: Prettifier.flag_prettifier(flag, Prettifier.unit_flag_3),
-            lambda flag: int(flag, 16)
+            lambda flag: Prettifier.flag_prettifier_back(flag, Prettifier.unit_flag_3)
         ],
         Arg_CtrlFlag: [
             lambda flag: Prettifier.flag_prettifier(flag, {}),
-            lambda flag: int(flag, 16)
+            lambda flag: Prettifier.flag_prettifier_back(flag, {})
         ],
         Arg_MagicFlag: [
             lambda flag: Prettifier.flag_prettifier(flag, {}),
-            lambda flag: int(flag, 16)
+            lambda flag: Prettifier.flag_prettifier_back(flag, {})
         ],
         Arg_Label: [
-            lambda arg: hex(int(arg)),
-            lambda arg: arg
+            lambda a: hex(int(a)),
+            lambda a: int(a, 0)
         ],
         Arg_Attribute: [
             lambda flag: Prettifier.flag_prettifier(flag, Prettifier.attributes),
-            lambda x: x
+            lambda flag: Prettifier.flag_prettifier_back(flag, Prettifier.attributes)
         ],
         Arg_Item: [
-            lambda arg: Prettifier.substitute(arg, Prettifier.items, "Magic"),
-            lambda arg: ""
+            lambda a: Prettifier.substitute(a, Prettifier.items, "Magic"),
+            lambda a: Prettifier.substitute_back(a, Prettifier.items, "Magic")
         ],
         Arg_Event: [
-            lambda arg: Prettifier.wrap("E", arg),
-            lambda arg: ""
+            lambda a: Prettifier.wrap("E", a),
+            lambda a: Prettifier.wrap_back(a)
         ],
         Arg_Function: [
-            lambda arg: Prettifier.wrap("F", arg),
-            lambda arg: ""
+            lambda a: Prettifier.wrap("F", a),
+            lambda a: Prettifier.wrap_back(a)
         ],
         Arg_EndEvent: [
-            lambda arg: "Propagate" if arg == "3567" else "Filter",
-            lambda arg: arg
+            lambda a: Prettifier.event(a),
+            lambda a: Prettifier.event_back(a)
         ],
         Arg_Unused: [
-            lambda arg: Prettifier.wrap("X", arg),
-            lambda arg: ""
+            lambda a: Prettifier.wrap("X", a),
+            lambda a: Prettifier.wrap_back(a)
         ]
     }
 
@@ -734,25 +798,41 @@ class DisassembledFunction(object):
         ordinal = None
         while 1:
             line = trimmed.pop(0)
-            if (".func" in line):
+            if ".func" in line:
                 ordinal = line.split()[1]
                 break
 
         assFunc = AssembledFunction(ordinal)
         while len(trimmed) > 0:
             line = trimmed.pop(0)
-            spLine = line.replace(",","").split()
+            spLine = line.strip().split(" ", 1)
+            spLine = [spLine[0]] + (list(map(lambda x: x.strip(), spLine[1].split(","))) if len(spLine) > 1 else [])
+            process_args = False
 
             if (spLine[0][0] == "@"):
                 opcode = spLine[0].replace("@","")
-                opcode = int(opcode,16)
+                if opcode == "Filter":
+                    opcode = 0xabc
+                else:
+                    opcode = int(opcode,16)
             elif (spLine[0][0] != "#"):
                 opnum = revOpNames[spLine[0]]
                 opcode = opnum + 0x8000
+                process_args = True
             else:
                 opcode = int(spLine[0].replace("#","0x80"),16)
+                process_args = True
             assFunc.data.append(opcode)
-            for arg in spLine[1:]:
+
+            for i, arg in enumerate(spLine[1:]):
+                if process_args:
+                    shortOp = opcode - 0x8000
+
+                    if shortOp in opTypes:
+                        argTypes = opTypes[shortOp]
+                        if argTypes[i] in Prettifier.prettifier:
+                            arg = Prettifier.prettifier[argTypes[i]][1](arg)
+
                 assFunc.data.append(int(arg))
         return assFunc
 
