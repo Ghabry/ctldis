@@ -77,6 +77,8 @@ opLengths = {   0x00:1, 0x01:0, 0x02:0, 0x03:0, 0x04:0, 0x05:0,
                 0xea:0, 0xeb:2, 0xec:3, 0xed:0, 0xee:1, 0xef:0,
                 0xf0:1 }
 
+opLengths_ext = { 0x00: 1 }
+
 opNames = {
     0x00:"init_unit",
     0x01:"wait_for_deploy",
@@ -279,6 +281,10 @@ opNames = {
     0xec:"test_other_unit_r_eq_i",
     0xed:"end_mission",
     0xee:"test_event_from_unit",
+}
+
+opNames_ext = {
+    0x00: "set_deployment_limit"
 }
 
 Arg_Unused = 0
@@ -874,6 +880,9 @@ class Prettifier:
 revOpNames = {}
 for opCode in opNames:
     revOpNames[opNames[opCode]] = opCode
+revOpNames_ext = {}
+for opCode in opNames_ext:
+    revOpNames_ext[opNames_ext[opCode]] = opCode
 
 class CTLFileReader(object):
     def __init__(self, path):
@@ -971,9 +980,15 @@ class DisassembledFunction(object):
                 else:
                     opcode = int(opcode,16)
             elif (spLine[0][0] != "#"):
-                opnum = revOpNames[spLine[0]]
-                opcode = opnum + 0x8000
-                process_args = True
+                if spLine[0] in revOpNames_ext:
+                    assFunc.data.append(0x8000 + 0xf1)
+                    opnum = revOpNames_ext[spLine[0]]
+                    opcode = opnum
+                    # todo process_args
+                else:
+                    opnum = revOpNames[spLine[0]]
+                    opcode = opnum + 0x8000
+                    process_args = True
             else:
                 opcode = int(spLine[0].replace("#","0x80"),16)
                 process_args = True
@@ -1020,18 +1035,23 @@ class AssembledFunction(object):
                     raise Exception("WARNING: unknown token %x" % opcode)
             else:
                 shortOp = (opcode & 0x7FFF)
-                argCount = opLengths[shortOp]
-                opName = opNames.get(shortOp, "#%.2x"%shortOp)
+                if shortOp == 0xf1:
+                    subop = opList.pop(0)
+                    argCount = opLengths_ext[subop]
+                    opName = opNames_ext[subop]
+                else:
+                    argCount = opLengths[shortOp]
+                    opName = opNames.get(shortOp, "#%.2x"%shortOp)
 
                 newLine = []
 
                 if argCount > 0:
-                    argTypes = opTypes[shortOp]
+                    argTypes = opTypes.get(shortOp)
 
                     add_label_annotation = None
 
                     for i in range(argCount):
-                        if argTypes[i] in Prettifier.prettifier:
+                        if shortOp != 0xf1 and argTypes[i] in Prettifier.prettifier:
                             if argTypes[i] == Arg_Label:
                                 if shortOp == 0x3f and opList[0] not in Prettifier.label_dict:
                                     Prettifier.label_dict[opList[0]] = self.name
@@ -1045,7 +1065,7 @@ class AssembledFunction(object):
                     if add_label_annotation is not None:
                         newLine[-1] = newLine[-1] + " ; label assigned in func {}".format(add_label_annotation)
 
-                decompiledFunc.lines.append([opName] + newLine)
+                    decompiledFunc.lines.append([opName] + newLine)
 
         return decompiledFunc
 
