@@ -1065,7 +1065,7 @@ class AssembledFunction(object):
                     if add_label_annotation is not None:
                         newLine[-1] = newLine[-1] + " ; label assigned in func {}".format(add_label_annotation)
 
-                    decompiledFunc.lines.append([opName] + newLine)
+                decompiledFunc.lines.append([opName] + newLine)
 
         return decompiledFunc
 
