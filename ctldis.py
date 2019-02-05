@@ -457,7 +457,7 @@ opTypes = {
     0xe7: [Arg_Unit, Arg_BtbNode],
     0xe9: [Arg_Unit, Arg_Item],
     0xeb: [Arg_Unit, Arg_UF1],
-    0xec: [Arg_Unit, Arg_Register],
+    0xec: [Arg_Unit, Arg_Register, Arg_Unit],
     0xee: [Arg_Unit],
     0xf0: [Arg_Unused]
 }
