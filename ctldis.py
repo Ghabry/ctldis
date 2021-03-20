@@ -2,13 +2,16 @@
 # First Release: 2009-12-07 (by Rob)
 # Last Update: 2021-03-20
 
+import sys
+if sys.version_info[0] < 3:
+    print("Please update to Python 3. Script aborted.")
+    sys.exit(1)
+
 from itertools import chain
 from array import array
-import sys
 from os import path
 from shutil import copyfile
 from collections import defaultdict
-import sys
 
 if len(sys.argv) > 1:
     p = path.split(sys.argv[1])
