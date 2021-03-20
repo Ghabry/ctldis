@@ -1,6 +1,6 @@
 # CTL Assembler/Disassembler
 # First Release: 2009-12-07 (by Rob)
-# Last Update: 2017-04-25
+# Last Update: 2021-03-20
 
 from itertools import chain
 from array import array
@@ -894,7 +894,7 @@ class CTLFileReader(object):
     def __LoadFile(self, path):
         F = open(path, "rb")
         self.data = array("i")
-        self.data.fromstring(F.read())
+        self.data.frombytes(F.read())
         F.close()
 
     def __ConstructOffs(self):
