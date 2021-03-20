@@ -11,7 +11,8 @@ from collections import defaultdict
 import sys
 
 if len(sys.argv) > 1:
-    base_name = sys.argv[1].upper()
+    p = path.split(sys.argv[1])
+    base_name = path.join(p[0], p[1].upper())
 else:
     base_name = "B101"
 
